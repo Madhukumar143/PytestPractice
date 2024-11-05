@@ -1,3 +1,5 @@
+import time
+
 import pytest
 from selenium import webdriver
 from selenium.webdriver import ActionChains
@@ -6,12 +8,7 @@ from selenium.webdriver.common.by import By
 driver = webdriver.Chrome()
 driver.maximize_window()
 
-@pytest.fixture(autouse = True)
-def automatic_fixture():
-    print("Automatic fixture")
-
-
-@pytest.fixture(scope="module") #by default it will be for every function
+@pytest.fixture()
 def setup_teardown():
     driver.get("https://ecommerce-playground.lambdatest.io/")
     driver.find_element(By.XPATH,"(//span[normalize-space()='My account'])[2]").click()
@@ -25,17 +22,21 @@ def setup_teardown():
     print("Login")
     yield
     driver.find_element(By.LINK_TEXT,"Logout").click()
-    print("logout")
 
-def test_order_history_title(setup_teardown):
-    print("verifying order history page title")
-    actual_title = "Order History"
-    driver.find_element(By.XPATH,"//a[normalize-space()='Order History']").click()
-    assert driver.title==actual_title,"title does not match test failed"
+@pytest.fixture()
+def setup_and_teardown():
+    driver.get("https://awesomeqa.com/ui/")
+    time.sleep(3)
 
+@pytest.mark.usefixtures("setup_and_teardown")
+def test_order_history_title():
+    driver.find_element(By.XPATH,"//input[@placeholder='Search']").send_keys("hp")
+    driver.find_element(By.XPATH,"//span[@class='input-group-btn']").click()
+    assert driver.find_element(By.LINK_TEXT,"HP LP3065").is_displayed(),"search results not found"
+    verification_text = ""
 
-def test_change_password(setup_teardown):
-    print("changing the password")
+@pytest.mark.usefixtures("setup_teardown")
+def test_change_password():
     driver.find_element(By.LINK_TEXT,"Password").click()
     driver.find_element(By.XPATH,"//input[@id='input-password']").send_keys("Test@3442")
     driver.find_element(By.XPATH,"//input[@id='input-confirm']").send_keys("Test@3442")
