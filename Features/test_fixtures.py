@@ -10,7 +10,6 @@ driver.maximize_window()
 def automatic_fixture():
     print("Automatic fixture")
 
-
 @pytest.fixture(scope="module") #by default it will be for every function
 def setup_teardown():
     driver.get("https://ecommerce-playground.lambdatest.io/")
@@ -21,7 +20,7 @@ def setup_teardown():
     driver.find_element(By.XPATH,"//span[normalize-space()='Login']").click()
     driver.find_element(By.XPATH,"//input[@id='input-email']").send_keys("madhukumarhm123.com@gmail.com")
     driver.find_element(By.XPATH,"//input[@id='input-password']").send_keys("Test@3442")
-    driver.find_element(By.XPATH,"//input[@value='Login']").click()
+    driver.find_element (By.XPATH,"//input[@value='Login']").click()
     print("Login")
     yield
     driver.find_element(By.LINK_TEXT,"Logout").click()

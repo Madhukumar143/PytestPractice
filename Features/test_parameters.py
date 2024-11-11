@@ -1,3 +1,5 @@
+import math
+
 import pytest
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -13,3 +15,10 @@ def test_parameterize(num1,num2,expected_result):
     driver.find_element(By.XPATH,"//button[normalize-space()='Get Sum']").click()
     actual_result = driver.find_element(By.XPATH,"//p[@id='addmessage']").text
     assert actual_result==expected_result,"expected result does not match with the actual"
+
+#Parameterise with two decorators
+@pytest.mark.parametrize("base",[1,2,3])
+@pytest.mark.parametrize("exponent",[2,4,6])
+def test_two_parameters(base,exponent):
+    result = base ** exponent
+    assert result == math.pow(base,exponent)
